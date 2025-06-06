@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kategóriák</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+        }
+        .header-image {
+            display: block;
+            margin: 0 auto 10px auto;
+            max-width: 300px;
+            border-radius: 12px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 15px;
+            justify-content: center;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .category {
+            width: 160px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .category:hover {
+            border-color: #0ff;
+        }
+        .category img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .category-title {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+        #clock {
+            position: fixed;
+            top: 10px;
+            right: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #00f, #0ff, #0f0, #ff0, #f00);
+            animation: rainbow 10s linear infinite;
+            color: black;
+            user-select: none;
+            z-index: 9999;
+        }
+        @keyframes rainbow {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- Kezdőkép -->
+<img src="https://archive.org/download/nerflixsandu/nerflixsandu.png" alt="Kezdőkép" class="header-image" />
+
+<!-- Óra -->
+<div id="clock">00:00:00</div>
+
+<!-- Galéria -->
+<div class="gallery" id="categoryGallery"></div>
+
+<script>
+    const categories = [
+        {
+            "title": "Filmking-Filmek",
+            "url": "file:///android_asset/fonts/ttf.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "NapiFilmek",
+            "url": "file:///android_asset/fonts/ttf1.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "FilmInvazio-Filmek",
+            "url": "file:///android_asset/fonts/ttf2.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "Filmy-Filmek",
+            "url": "file:///android_asset/fonts/ttf3.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "Mzigo-Filmek",
+            "url": "file:///android_asset/fonts/ttf4.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "Torrent-Filmek",
+            "url": "file:///android_asset/fonts/ttf5.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        },
+        {
+            "title": "Netflix-Premium",
+            "url": "file:///android_asset/fonts/ttf6.dat",
+            "img_url": "https://ia600504.us.archive.org/9/items/polish-20250421-185417988/Polish_20250421_185417988.png"
+        }
+    ];
+
+    const galleryDiv = document.getElementById('categoryGallery');
+
+    categories.forEach(cat => {
+        const catDiv = document.createElement('div');
+        catDiv.classList.add('category');
+        catDiv.onclick = () => {
+            window.open(cat.url, '_blank');
+        };
+
+        catDiv.innerHTML = `
+            <img src="${cat.img_url}" alt="${cat.title}" />
+            <div class="category-title">${cat.title}</div>
+        `;
+        galleryDiv.appendChild(catDiv);
+    });
+
+    // Óra frissítése
+    function updateClock() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock(); // induláskor azonnal
+</script>
+
+</body>
+</html>
