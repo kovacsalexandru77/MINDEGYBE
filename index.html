@@ -29,19 +29,18 @@
     }
 
     .sidebar a {
-    text-decoration: none;
-    color: #00f7ff; /* Neon kék szín */
-    font-size: 24px;
-    margin: 20px 0;
-    transition: transform 0.3s, color 0.3s;
-    text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; /* Neon effektus */
-}
+      text-decoration: none;
+      color: #00f7ff;
+      font-size: 24px;
+      margin: 20px 0;
+      transition: transform 0.3s, color 0.3s;
+    }
 
-.sidebar a:hover {
-    color: #ff00ff; /* Hover szín */
-    transform: scale(1.2);
-    text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff; /* Hover neon effektus */
-}
+    .sidebar a:hover {
+      color: #ff00ff;
+      transform: scale(1.2);
+      text-shadow: 0 0 10px #ff00ff;
+    }
 
     .content {
       margin-left: 60px;
@@ -210,7 +209,11 @@
 </head>
 <body>
 
-  <!-- NEON SIDEBAR -->
+    <!-- NEON SIDEBAR -->
+<div class="sidebar">
+  <img src="file:///android_asset/fonts/NS.png" alt="Sidebar Image" class="sidebar-image" />
+  <a href="javascript:void(0)" onclick="window.open('https://netfree2.cc/tv/home', '_blank')">
+  <img src="file:///android_asset/net.png" alt="NetFlix" width="24" height="24" style="vertical-align: middle;">
     <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Fking/', '_blank')"><i class="bi bi-house"></i></a>
     <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/..../', '_blank')"><i class="bi bi-file-play"></i></a>
     <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Napi/', '_blank')"><i class="bi bi-tv"></i></a>
@@ -220,6 +223,16 @@
     <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/NetFree/', '_blank')"><i class="bi bi-film"></i></a>
     <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Catcas/', '_blank')"><i class="bi bi-camera-reels"></i></a>
 </div>
+<style>
+  .sidebar-image {
+    width: 40px; /* adjust size as needed */
+    height: auto; /* maintains aspect ratio */
+    position: absolute; /* position the image absolutely */
+    top: 10px; /* distance from the top */
+    right: 10px; /* distance from the right */
+    z-index: 1001; /* ensure it is above other elements */
+  }
+</style>
 
   <!-- TARTALOM -->
   <div class="content">
