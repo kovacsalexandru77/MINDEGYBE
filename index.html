@@ -17,6 +17,19 @@
       flex-direction: column;
     }
 
+    #categorySelect {
+      position: fixed;
+      top: 10px;
+      left: 80px;
+      z-index: 10001;
+      padding: 6px 10px;
+      font-size: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: 2px solid cyan;
+      border-radius: 6px;
+    }
+
     .sidebar {
       position: fixed;
       top: 0;
@@ -291,9 +304,24 @@
   .icon-link {
     text-decoration: none;
   }
-</style>
+  </style>
 </head>
 <body>
+
+<!-- 🔽 Kategóriaválasztó a bal felső sarokban -->
+<select id="categorySelect" onchange="changeCategory(this.value)">
+  <option value="https://filmking.eu/filmek-evszam-szerint/">Összes kategória</option>
+  <option value="https://jobbmintatv.pro/filmek/1/1/drama/////">Dráma</option>
+  <option value="https://filmking.eu/horror-3/">Horror</option>
+  <option value="https://filmking.eu/csaladi-2/">Családi</option>
+  <option value="https://filmking.eu/sci-fi-2/">Sci-fi</option>
+  <option value="https://filmking.eu/misztikus-2/">Misztikus</option>
+  <option value="https://filmking.eu/thriler/">Thriller</option>
+  <option value="https://filmking.eu/animacios/">Animáció</option>
+  <option value="https://filmking.eu/kaland-2/">Kaland</option>
+  <option value="https://filmking.eu/akcio-2/">Akció</option>
+  <option value="https://filmking.eu/vigjatek-4/">Vígjáték</option>
+</select>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
@@ -507,180 +535,176 @@
     </div>
   </div>
 
+    <!-- Filmrács -->
+    <div class="grid" id="movies"></div>
+    <div class="pagination" id="pagination"></div>
+    <button class="back-btn" id="backBtn" style="display: none;">Vissza</button>
+  </div>
+
+  <!-- Lejátszó -->
+  <div id="player-background" onclick="closePlayer()">
+    <div id="player-content" onclick="event.stopPropagation()"></div>
+  </div>
+  
   <script>
-    function updateClock() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+  const container = document.getElementById('movies');
+  const paginationContainer = document.getElementById('pagination');
+  const supportedHosts = ["ok.ru", "vidoza", "upstream", "uqload", "dood", "mixdrop", "od.lk", "videa.hu", "vk.com", "streamtape.com", "streamlare.com", "sbembed.com", "voe.sx", "filemoon.sx", "vidhide.com", "filelions.com", "zippyshare.com", "youtube.com", "drive.google.com"];
+  const maxPages = 100;
 
-    let slideIndex = 0;
-    showSlides();
+  let currentCategoryUrl = "https://filmking.eu/filmek-evszam-szerint/";
 
-    function showSlides() {
-      let i;
-      const slides = document.getElementsByClassName("mySlides");
+  function changeCategory(url) {
+    currentCategoryUrl = url;
+    loadPage(1);
+  }
 
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
-      }
+  function loadPage(page = 1) {
+    container.innerHTML = "<h3 style='text-align:center'>Betöltés...</h3>";
+    const categoryPageUrl = currentCategoryUrl + (page > 1 ? page + "/" : "");
+    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(categoryPageUrl)}`;
 
-      slideIndex++;
-      if (slideIndex > slides.length) {slideIndex = 1}    
+    fetch(url)
+      .then(res => res.text())
+      .then(html => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const articles = doc.querySelectorAll('article');
+        container.innerHTML = '';
+        const seen = new Set();
 
-      slides[slideIndex - 1].style.display = "block";  
-      setTimeout(showSlides, 3000); // 3 másodpercenként vált
-    }
+        articles.forEach(article => {
+          const img = article.querySelector('img')?.src;
+          const title = article.querySelector('h3')?.innerText;
+          const link = article.querySelector('a.elementor-post__thumbnail__link')?.href;
+          const yearElement = article.querySelector('.elementor-post__badge');
+          const year = yearElement ? yearElement.innerText : 'N/A';
 
-    const container = document.getElementById('movies');
-    const paginationContainer = document.getElementById('pagination');
-    const maxPages = 130;
-    const supportedHosts = ["ok.ru", "vidoza", "upstream", "uqload", "dood", "mixdrop", "od.lk", "videa.hu", "vk.com", "streamtape.com", "streamlare.com", "sbembed.com", "voe.sx", "filemoon.sx", "vidhide.com", "filelions.com", "zippyshare.com", "youtube.com", "drive.google.com"];
+          if (img && title && link && !seen.has(img)) {
+            seen.add(img);
+            const card = document.createElement('div');
+            card.className = 'card';
 
-    function loadPage(page = 1) {
-      container.innerHTML = "<h3 style='text-align:center'>Betöltés...</h3>";
-      const url = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://filmking.eu/filmek-evszam-szerint/' + (page > 1 ? page + '/' : ''))}`;
+            fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(link)}`)
+              .then(res => res.text())
+              .then(pageHtml => {
+                const detailDoc = new DOMParser().parseFromString(pageHtml, 'text/html');
+                const description = detailDoc.querySelector('.film-bilgileri .movies-data')?.innerText || "Nincs elérhető leírás.";
+                const category = detailDoc.querySelector('.elementor-icon-list-text')?.innerText || "N/A";
 
-      fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const doc = new DOMParser().parseFromString(html, 'text/html');
-          const articles = doc.querySelectorAll('article');
-          container.innerHTML = '';
-          const seen = new Set();
+                card.innerHTML = `
+                  <img src="${img}">
+                  <div class="year-tag">${year}</div>
+                  <div class="card-title">${title}</div>
+                  <div class="card-description">
+                    ${description}
+                    <span class="more-btn">Tovább olvasom</span>
+                  </div>
+                  <div class="card-title"><strong>${category}</strong></div>
+                `;
 
-          articles.forEach(article => {
-            const img = article.querySelector('img')?.src;
-            const title = article.querySelector('h3')?.innerText;
-            const link = article.querySelector('a.elementor-post__thumbnail__link')?.href;
-            const yearElement = article.querySelector('.elementor-post__badge');
+                const moreBtn = card.querySelector('.more-btn');
+                const cardDesc = card.querySelector('.card-description');
+                moreBtn.addEventListener('click', () => {
+                  cardDesc.classList.toggle('show-more');
+                  moreBtn.textContent = cardDesc.classList.contains('show-more') ? 'Bezárás' : 'Tovább olvasom';
+                });
 
-            const year = yearElement ? yearElement.innerText : 'N/A';
+                card.onclick = () => {
+                  const iframes = detailDoc.querySelectorAll('iframe');
+                  let foundSrc = null;
 
-            if (img && title && link && !seen.has(img)) {
-              seen.add(img);
-              const card = document.createElement('div');
-              card.className = 'card';
+                  iframes.forEach(iframe => {
+                    let src = iframe.getAttribute('src');
+                    if (src && src.startsWith("//")) src = "https:" + src;
+                    if (src && !src.startsWith("http")) src = "https://" + src;
 
-              fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(link)}`)
-                .then(res => res.text())
-                .then(page => {
-                  const detailDoc = new DOMParser().parseFromString(page, 'text/html');
-                  const description = detailDoc.querySelector('.film-bilgileri .movies-data')?.innerText;
-                  const category = detailDoc.querySelector('.elementor-icon-list-text')?.innerText;
-                  const movieCategory = category || 'N/A';
-
-                  card.innerHTML = `
-                    <img src="${img}">
-                    <div class="year-tag">${year}</div>
-                    <div class="card-title">${title}</div>
-                    <div class="card-description">
-                      <div class="film-bilgileri">
-                        <div class="movies-data">
-                          ${description ? description : "Nincs elérhető leírás."}
-                        </div>
-                      </div>
-                      <div class="dots">...</div>
-                      <div class="more-text">${description ? description : "Nincs elérhető leírás."}</div>
-                      <span class="more-btn">Tovább olvasom</span>
-                    </div>
-                    <div class="card-title"><strong>${movieCategory}</strong></div>
-                  `;
-
-                  const moreBtn = card.querySelector('.more-btn');
-                  const cardDesc = card.querySelector('.card-description');
-                  moreBtn.addEventListener('click', () => {
-                    cardDesc.classList.toggle('show-more');
-                    moreBtn.textContent = cardDesc.classList.contains('show-more') ? 'Bezárás' : 'Tovább olvasom';
+                    if (supportedHosts.some(h => src?.includes(h)) && !foundSrc) {
+                      foundSrc = src;
+                    }
                   });
 
-                  card.onclick = () => {
-                    const iframes = detailDoc.querySelectorAll('iframe');
-                    let foundSrc = null;
+                  if (foundSrc) {
+                    openModal(foundSrc);
+                  } else {
+                    alert("Nem található megfelelő lejátszó link.");
+                  }
+                };
 
-                    iframes.forEach(iframe => {
-                      let src = iframe.getAttribute('src');
-                      if (src) {
-                        if (src.startsWith('//')) src = 'https:' + src;
-                        if (!src.startsWith('http')) src = 'https://' + src;
-
-                        if (supportedHosts.some(host => src.includes(host)) && !foundSrc) {
-                          foundSrc = src;
-                        }
-                      }
-                    });
-
-                    if (foundSrc) {
-                      openModal(foundSrc);
-                    } else {
-                      alert("Nem található megfelelő lejátszó link.");
-                    }
-                  };
-
-                  container.appendChild(card);
-                });
-            }
-          });
-
-          updatePagination(page);
+                container.appendChild(card);
+              });
+          }
         });
-    }
 
-    function updatePagination(currentPage) {
-      paginationContainer.innerHTML = '';
-      const createBtn = (num, label = null) => {
-        const btn = document.createElement('button');
-        btn.textContent = label || num;
-        if (num === currentPage) btn.classList.add('active');
-        btn.onclick = () => loadPage(num);
-        paginationContainer.appendChild(btn);
-      };
+        updatePagination(page);
+      });
+  }
 
-      if (currentPage > 1) {
-        createBtn(currentPage - 1, 'Előző');
+  function updatePagination(currentPage) {
+    paginationContainer.innerHTML = '';
+    const createBtn = (num, label = null) => {
+      const btn = document.createElement('button');
+      btn.textContent = label || num;
+      if (num === currentPage) btn.classList.add('active');
+      btn.onclick = () => loadPage(num);
+      paginationContainer.appendChild(btn);
+    };
+
+    if (currentPage > 1) createBtn(currentPage - 1, "Előző");
+
+    for (let i = 1; i <= maxPages; i++) {
+      if (i === currentPage || (i >= currentPage - 2 && i <= currentPage + 2)) {
+        createBtn(i);
       }
-
-      for (let i = 1; i <= maxPages; i++) {
-        if (i === currentPage || (i >= currentPage - 2 && i <= currentPage + 2)) {
-          createBtn(i);
-        }
-      }
-
-      if (currentPage < maxPages) {
-        createBtn(currentPage + 1, 'Következő');
-      }
-
-      const totalPagesText = document.createElement('span');
-      totalPagesText.textContent = `Oldal: ${currentPage} / ${maxPages}`;
-      paginationContainer.appendChild(totalPagesText);
     }
 
-    function openModal(src) {
-      const modal = document.getElementById('player-background');
-      const playerContent = document.getElementById('player-content');
+    if (currentPage < maxPages) createBtn(currentPage + 1, "Következő");
 
-      playerContent.innerHTML = `
-          <iframe src="${src}?autoplay=1" frameborder="0" allowfullscreen style="width: 80vw; height: 80vh;"></iframe>
-      `;
+    const info = document.createElement('span');
+    info.textContent = ` Oldal: ${currentPage} / ${maxPages}`;
+    paginationContainer.appendChild(info);
+  }
 
-      modal.style.display = 'flex';
+  function openModal(src) {
+    const modal = document.getElementById('player-background');
+    const content = document.getElementById('player-content');
+    content.innerHTML = `<iframe src="${src}?autoplay=1" frameborder="0" allowfullscreen style="width: 80vw; height: 80vh;"></iframe>`;
+    modal.style.display = "flex";
+  }
+
+  function closePlayer() {
+    const modal = document.getElementById('player-background');
+    modal.style.display = 'none';
+    document.getElementById('player-content').innerHTML = '';
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}`;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  let slideIndex = 0;
+  showSlides();
+
+  function showSlides() {
+    const slides = document.getElementsByClassName("mySlides");
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
     }
+    slideIndex++;
+    if (slideIndex > slides.length) slideIndex = 1;
+    slides[slideIndex - 1].style.display = "block";
+    setTimeout(showSlides, 3000);
+  }
 
-    function closePlayer() {
-      const modal = document.getElementById('player-background');
-      modal.style.display = 'none';
-      const playerContent = document.getElementById('player-content');
-      playerContent.innerHTML = '';
-    }
+  document.getElementById('backBtn').addEventListener('click', () => window.history.back());
 
-    document.getElementById('backBtn').addEventListener('click', () => {
-      window.history.back();
-    });
-
-    loadPage();
+  // Induló betöltés
+  loadPage();
   </script>
 
   <style>
