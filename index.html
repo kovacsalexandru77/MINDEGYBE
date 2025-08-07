@@ -270,31 +270,149 @@
   transform: scale(1.1);
   transition: all 0.3s ease;
 }
-  </style>
+  .sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;           /* ✔ kisebb távolság az ikonok között */
+  padding: 4px 6px;   /* ✔ kisebb margó a széleken */
+}
+  .icon-with-label {
+    text-align: center;
+    color: white;
+    font-size: 1.8rem;
+  }
+  .icon-label {
+    font-size: 0.6rem;
+    color: #00ffff;
+    text-shadow: 0 0 4px #00ffff, 0 0 6px #00ffff;
+    margin-top: 2px;
+    display: block;
+  }
+  .icon-link {
+    text-decoration: none;
+  }
+</style>
 </head>
 <body>
 
-  <!-- NEON SIDEBAR -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<!-- NEON SIDEBAR -->
 <div class="sidebar">
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/NNN/', '_blank')">
-    <img src="https://dn720700.ca.archive.org/0/items/netflix1_202506/netflix1.png" alt="NetFlix" width="24" height="24" style="vertical-align: middle;">
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Fking/', '_blank')"><i class="bi bi-house"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/NAPI2/', '_blank')"><i class="bi bi-file-play"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Napi/', '_blank')"><i class="bi bi-tv"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Fynvazioauto/', '_blank')"><i class="bi bi-collection-play"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/skyss/', '_blank')">
-    <img src="https://w7.pngwing.com/pngs/923/214/png-transparent-sky-plc-television-sky-uk-sky-sports-comcast-orange-sky-text-logo-magenta-thumbnail.png" alt="skys" width="24" height="24" style="vertical-align: middle;">
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/CINE/', '_blank')"><i class="bi bi-play-btn"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Jobb/', '_blank')"><i class="bi bi-play-btn"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/FILMEKSANDU/', '_blank')"><i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/MozyGo/', '_blank')"><i class="bi bi-play-btn"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Moviedr/', '_blank')"><i class="bi bi-film"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/dmd/', '_blank')"><i class="bi bi-film"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Catcas/', '_blank')"><i class="bi bi-camera-reels"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/videa/', '_blank')"><i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/Mozimixxx/', '_blank')"><i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i></a>
-    <a href="javascript:void(0)" onclick="window.open('https://kovacsalexandru77.github.io/FILMEKSANDU/', '_blank')"><i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i></a>
-    </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/NNN/" target="_blank">
+      <img src="https://dn720700.ca.archive.org/0/items/netflix1_202506/netflix1.png" alt="NetFlix" width="24" height="24">
+    </a>
+    <span class="icon-label">NETFLIX</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Fking/" target="_blank">
+      <i class="bi bi-house"></i>
+    </a>
+    <span class="icon-label">FKING</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/NAPI2/" target="_blank">
+      <i class="bi bi-file-play"></i>
+    </a>
+    <span class="icon-label">NAPI2</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Napi/" target="_blank">
+      <i class="bi bi-tv"></i>
+    </a>
+    <span class="icon-label">NAPI1</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Fynvazioauto/" target="_blank">
+      <i class="bi bi-collection-play"></i>
+    </a>
+    <span class="icon-label">FILMINV</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/skyss/" target="_blank">
+      <img src="https://w7.pngwing.com/pngs/923/214/png-transparent-sky-plc-television-sky-uk-sky-sports-comcast-orange-sky-text-logo-magenta-thumbnail.png" alt="skys" width="24" height="24">
+    </a>
+    <span class="icon-label">SKYS</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/CINE/" target="_blank">
+      <i class="bi bi-play-btn"></i>
+    </a>
+    <span class="icon-label">CINEMA</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Jobb/" target="_blank">
+      <i class="bi bi-play-btn"></i>
+    </a>
+    <span class="icon-label">JOBBF</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/FILMEKSANDU/" target="_blank">
+      <i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">FILMEK</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/MozyGo/" target="_blank">
+      <i class="bi bi-play-btn"></i>
+    </a>
+    <span class="icon-label">MOZIGO</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Moviedr/" target="_blank">
+      <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">MOVIEDR</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/dmd/" target="_blank">
+      <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">DMD</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Catcas/" target="_blank">
+      <i class="bi bi-camera-reels"></i>
+    </a>
+    <span class="icon-label">CATTV</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/videa/" target="_blank">
+      <i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">VIDEA</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/Mozimixxx/" target="_blank">
+      <i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">MOZIMIX</span>
+  </div>
+
+  <div class="icon-with-label">
+    <a class="icon-link" href="https://kovacsalexandru77.github.io/FILMEKSANDU/" target="_blank">
+      <i class="bi bi-folder-symlink"></i> <i class="bi bi-film"></i>
+    </a>
+    <span class="icon-label">FILMEK</span>
+  </div>
+
+</div>
 </div>
 <style>
   .sidebar-image {
@@ -593,4 +711,4 @@
 }
   </style>
 </body>
-    </html>
+</html>
